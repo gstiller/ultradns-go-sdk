@@ -1,4 +1,4 @@
-package geo
+package geoip
 
 import (
 	"fmt"
@@ -37,14 +37,14 @@ func Get(c *client.Client) (*Service, error) {
 	return &Service{c}, nil
 }
 
-func (s *Service) CreateDirGroupGeoIP(dirGroupGeoIP *DirGroupGeoIP, cfn *client.Config) (*http.Response, error) {
+func (s *Service) CreateDirGroupGeoIP(dirGroupGeoIP *DirGroupGeoIP) (*http.Response, error) {
 	target := client.Target(&client.SuccessResponse{})
 
 	if s.c == nil {
 		return nil, errors.ServiceError(serviceName)
 	}
 
-	createPath := basePath + cfn.Username + "/dirgroups/geo/" + dirGroupGeoIP.Name
+	createPath := basePath + dirGroupGeoIP.Account + "/dirgroups/geo/" + dirGroupGeoIP.Name
 	res, err := s.c.Do(http.MethodPost, createPath, dirGroupGeoIP, target)
 
 	if err != nil {
@@ -61,7 +61,7 @@ func (s *Service) dirGroupURI(groupName string) string {
 	return fmt.Sprintf("accounts/%s/dirgroups/geo/%s", "testing", groupName)
 }
 
-func (s *Service) ReadDirGroupGeoIP(dirGroupGeoIPName string, cfn *client.Config) (*http.Response, *Response, error) {
+func (s *Service) ReadDirGroupGeoIP(dirGroupGeoIPName string, dirGroupGeoIPAccount string) (*http.Response, *Response, error) {
 	target := client.Target(&Response{})
 	dirGroupGeoIPName = url.PathEscape(dirGroupGeoIPName)
 
@@ -69,7 +69,7 @@ func (s *Service) ReadDirGroupGeoIP(dirGroupGeoIPName string, cfn *client.Config
 		return nil, nil, errors.ServiceError(serviceName)
 	}
 
-	readPath := basePath + cfn.Username + "/dirgroups/geo/" + dirGroupGeoIPName
+	readPath := basePath + dirGroupGeoIPAccount + "/dirgroups/geo/" + dirGroupGeoIPName
 	res, err := s.c.Do(http.MethodGet, readPath, nil, target)
 	if err != nil {
 		return nil, nil, errors.ReadError(serviceName, dirGroupGeoIPName, err)
@@ -80,7 +80,7 @@ func (s *Service) ReadDirGroupGeoIP(dirGroupGeoIPName string, cfn *client.Config
 	return res, dirGroupGeoIPResponse, nil
 }
 
-func (s *Service) UpdateDirGroupGeoIP(dirGroupGeoIPName string, dirGroupGeoIP *DirGroupGeoIP, cfn *client.Config) (*http.Response, error) {
+func (s *Service) UpdateDirGroupGeoIP(dirGroupGeoIPName string, dirGroupGeoIP *DirGroupGeoIP) (*http.Response, error) {
 	target := client.Target(&client.SuccessResponse{})
 	dirGroupGeoIPName = url.PathEscape(dirGroupGeoIPName)
 
@@ -88,7 +88,7 @@ func (s *Service) UpdateDirGroupGeoIP(dirGroupGeoIPName string, dirGroupGeoIP *D
 		return nil, errors.ServiceError(serviceName)
 	}
 
-	updatePath := basePath + cfn.Username + "/dirgroups/geo/" + dirGroupGeoIPName
+	updatePath := basePath + dirGroupGeoIP.Account + "/dirgroups/geo/" + dirGroupGeoIPName
 	res, err := s.c.Do(http.MethodPut, updatePath, dirGroupGeoIP, target)
 
 	if err != nil {
@@ -98,7 +98,7 @@ func (s *Service) UpdateDirGroupGeoIP(dirGroupGeoIPName string, dirGroupGeoIP *D
 	return res, nil
 }
 
-func (s *Service) PartialUpdateDirGroupGeoIP(dirGroupGeoIPName string, dirGroupGeoIP *DirGroupGeoIP, cfn *client.Config) (*http.Response, error) {
+func (s *Service) PartialUpdateDirGroupGeoIP(dirGroupGeoIPName string, dirGroupGeoIP *DirGroupGeoIP) (*http.Response, error) {
 	target := client.Target(&client.SuccessResponse{})
 	dirGroupGeoIPName = url.PathEscape(dirGroupGeoIPName)
 
@@ -106,7 +106,7 @@ func (s *Service) PartialUpdateDirGroupGeoIP(dirGroupGeoIPName string, dirGroupG
 		return nil, errors.ServiceError(serviceName)
 	}
 
-	partiallyUpdatePath := basePath + cfn.Username + "/dirgroups/geo/" + dirGroupGeoIPName
+	partiallyUpdatePath := basePath + dirGroupGeoIP.Account + "/dirgroups/geo/" + dirGroupGeoIPName
 	res, err := s.c.Do(http.MethodPatch, partiallyUpdatePath, dirGroupGeoIP, target)
 
 	if err != nil {
@@ -116,7 +116,7 @@ func (s *Service) PartialUpdateDirGroupGeoIP(dirGroupGeoIPName string, dirGroupG
 	return res, nil
 }
 
-func (s *Service) DeleteDirGroupGeoIP(dirGroupGeoIPName string, cfn *client.Config) (*http.Response, error) {
+func (s *Service) DeleteDirGroupGeoIP(dirGroupGeoIPName string, dirGroupGeoIPAccount string) (*http.Response, error) {
 	target := client.Target(&client.SuccessResponse{})
 	dirGroupGeoIPName = url.PathEscape(dirGroupGeoIPName)
 
@@ -124,7 +124,7 @@ func (s *Service) DeleteDirGroupGeoIP(dirGroupGeoIPName string, cfn *client.Conf
 		return nil, errors.ServiceError(serviceName)
 	}
 
-	deletePath := basePath + cfn.Username + "/dirgroups/geo/" + dirGroupGeoIPName
+	deletePath := basePath + dirGroupGeoIPAccount + "/dirgroups/geo/" + dirGroupGeoIPName
 	res, err := s.c.Do(http.MethodDelete, deletePath, nil, target)
 
 	if err != nil {
@@ -134,14 +134,14 @@ func (s *Service) DeleteDirGroupGeoIP(dirGroupGeoIPName string, cfn *client.Conf
 	return res, nil
 }
 
-func (s *Service) ListDirGroupGeoIP(queryInfo *helper.QueryInfo, cfn client.Config) (*http.Response, *ResponseList, error) {
+func (s *Service) ListDirGroupGeoIP(queryInfo *helper.QueryInfo, dirGroupGeoIPAccount string) (*http.Response, *ResponseList, error) {
 	target := client.Target(&ResponseList{})
 
 	if s.c == nil {
 		return nil, nil, errors.ServiceError(serviceName)
 	}
 
-	listPath := basePath + cfn.Username + "/dirgroups/geo"
+	listPath := basePath + dirGroupGeoIPAccount + "/dirgroups/geo"
 	res, err := s.c.Do(http.MethodGet, listPath+queryInfo.URI(), nil, target)
 
 	if err != nil {
