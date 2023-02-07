@@ -22,9 +22,9 @@ type Response struct {
 }
 
 type ResponseList struct {
-	QueryInfo      *helper.QueryInfo  `json:"queryInfo,omitempty"`
-	CursorInfo     *helper.CursorInfo `json:"cursorInfo,omitempty"`
-	DirGroupGeoIPs []*Response        `json:"dirgroupgeoips,omitempty"`
+	QueryInfo    *helper.QueryInfo  `json:"queryInfo,omitempty"`
+	CursorInfo   *helper.CursorInfo `json:"cursorInfo,omitempty"`
+	DirGroupGeos []*Response        `json:"dirgroupgeos,omitempty"`
 }
 
 func (d *DirGroupGeo) DirGroupGeoURI() string {
