@@ -8,14 +8,14 @@ import (
 )
 
 type DirGroupIP struct {
-	Account     string       `json:"account_name,omitempty"`
+	AccountName string       `json:"account_name,omitempty"`
 	Name        string       `json:"name,omitempty"`
 	Description string       `json:"description,omitempty"`
 	IPs         []*IPAddress `json:"ips,omitempty"`
 }
 
 type Response struct {
-	Account     string       `json:"account_name,omitempty"`
+	AccountName string       `json:"account_name,omitempty"`
 	Name        string       `json:"name,omitempty"`
 	Description string       `json:"description,omitempty"`
 	IPs         []*IPAddress `json:"ips,omitempty"`
@@ -35,14 +35,14 @@ type IPAddress struct {
 }
 
 func (d *DirGroupIP) DirGroupIPURI() string {
-	d.Account = url.PathEscape(d.Account)
+	d.AccountName = url.PathEscape(d.AccountName)
 	d.Name = url.PathEscape(d.Name)
 
-	return fmt.Sprintf("accounts/%s/dirgroups/ip/%s", d.Account, d.Name)
+	return fmt.Sprintf("accounts/%s/dirgroups/ip/%s", d.AccountName, d.Name)
 }
 
 func (d *DirGroupIP) DirGroupIPListURI() string {
-	d.Account = url.PathEscape(d.Account)
+	d.AccountName = url.PathEscape(d.AccountName)
 
-	return fmt.Sprintf("accounts/%s/dirgroups/ip", d.Account)
+	return fmt.Sprintf("accounts/%s/dirgroups/ip", d.AccountName)
 }
