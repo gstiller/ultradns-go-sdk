@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"net/http/httputil"
 
 	"github.com/ultradns/ultradns-go-sdk/internal/version"
 	"github.com/ultradns/ultradns-go-sdk/pkg/errors"
@@ -20,6 +22,8 @@ func (c *Client) Do(method, path string, payload, target interface{}) (*http.Res
 	url := fmt.Sprintf("%s/%s", c.baseURL, path)
 	body := new(bytes.Buffer)
 
+	log.SetPrefix("url: ")
+	log.Println(c.baseURL, path)
 	if payload != nil {
 		err := json.NewEncoder(body).Encode(payload)
 
@@ -40,7 +44,15 @@ func (c *Client) Do(method, path string, payload, target interface{}) (*http.Res
 	req.Header.Add("Accept", contentType)
 	req.Header.Add("User-Agent", userAgent)
 
+	log.SetPrefix("REQ: ")
+	reqDump, err := httputil.DumpRequestOut(req, true)
+	log.Println(string(reqDump))
+
 	res, err := c.httpClient.Do(req)
+
+	log.SetPrefix("RES: ")
+	respDump, err := httputil.DumpResponse(res, true)
+	log.Println(string(respDump))
 
 	if err != nil {
 		return nil, err
